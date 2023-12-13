@@ -1,4 +1,4 @@
-#!/bin/sh
+# !/bin/sh
 
 # Exit immediately if Newman complains
 set -e
@@ -11,5 +11,7 @@ trap 'kill $PID' EXIT
 PID=$!
 
 # Run Newman with the specified Postman collections and environment
-newman run forum_multiple_posts.postman_collection.json -e env.json # Use the environment file
-newman run forum_post_read_delete.postman_collection.json -n 50 # 50 iterations
+echo "running tests..."
+newman run ../tests/forum_multiple_posts.postman_collection.json -e ../tests/env.json # Use the environment file
+newman run ../tests/forum_post_read_delete.postman_collection.json -n 50 # 50 iterations
+echo "tests completed"
