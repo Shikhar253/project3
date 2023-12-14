@@ -1,0 +1,244 @@
+{
+	"info": {
+		"_postman_id": "b2376ec8-0929-427c-8a23-55b8f9710f70",
+		"name": "forum_extension1_users_and_user_keys_tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26564101"
+	},
+	"item": [
+		{
+			"name": "create new user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Create user returns user id and key\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('user_id');\r",
+							"    pm.expect(jsonData).to.have.property('user_key');\r",
+							"\r",
+							"    pm.environment.set(\"user_id\", jsonData.user_id);\r",
+							"    pm.environment.set(\"user_key\", jsonData.user_key);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has user_id and user_key\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('user_id');\r",
+							"    pm.expect(jsonData).to.have.property('user_key');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "content-type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"TestUser\",\r\n    \"real_name\": \"Test User\",\r\n    \"avatar_icon\": \"http://example.com/avatar.jpg\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create a new post with user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Create user returns 200 status code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Create user returns user id and key\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('user_id');\r",
+							"    pm.expect(jsonData).to.have.property('user_key');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Create post returns 200 status code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Create post returns post id and key\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('id');\r",
+							"    pm.expect(jsonData).to.have.property('key');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Create post returns associated user id\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('user_id');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Read post returns 200 status code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Read post returns associated user id\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('user_id');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has expected structure\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('id');\r",
+							"    pm.environment.set(\"post_id\",jsonData.id)\r",
+							"    pm.expect(jsonData).to.have.property('key');\r",
+							"    pm.expect(jsonData).to.have.property('timestamp');\r",
+							"    pm.expect(jsonData).to.have.property('user_id');\r",
+							"    pm.expect(jsonData).to.have.property('user_key');\r",
+							"    pm.expect(jsonData).to.have.property('username');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"msg\": \"hello\",\r\n    \"user_id\":\"{{user_id}}\",\r\n    \"user_key\":\"{{user_key}}\"\r\n\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/post",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "read a post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Read post status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Read post response must be okay to process\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('user_id');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/post/{{post_id}}",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"post",
+						"{{post_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete a post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has expected structure\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('id');\r",
+							"    pm.expect(jsonData).to.have.property('key');\r",
+							"    pm.expect(jsonData).to.have.property('timestamp');\r",
+							"    pm.expect(jsonData).to.have.property('user_id');\r",
+							"    pm.expect(jsonData).to.have.property('user_key');\r",
+							"    pm.expect(jsonData).to.have.property('username');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/post/{{post_id}}/delete/{{user_key}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"post",
+						"{{post_id}}",
+						"delete",
+						"{{user_key}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

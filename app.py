@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import secrets
 from datetime import datetime
 import threading
+import logging
 
 app = Flask(__name__)
 posts = []
@@ -10,6 +11,11 @@ user_metadata = {}
 post_id_counter = 1
 user_id_counter = 1
 state_lock = threading.Lock()
+
+handler = logging.StreamHandler()
+handler.setLevel(logging.INFO)
+app.logger.addHandler(handler)
+app.logger.setLevel(logging.INFO) 
 
 # Create a User
 @app.route('/user', methods=['POST'])
@@ -102,9 +108,16 @@ def create_post():
 
         if not isinstance(data, dict) or 'msg' not in data or not isinstance(data['msg'], str):
             return jsonify({'err': 'Bad request. Request body must be a JSON object with a "msg" field of type string'}), 400
-
-        user_id = data.get('user_id')
+        
+        user_id =data.get('user_id')
         user_key = data.get('user_key')
+        if user_id:
+            user_id=int(user_id)
+        # app.logger.info("user id: %s", user_id)
+        # app.logger.info("user id is int? %s", isinstance(user_id,int))
+        # app.logger.info("user id not in users?",user_id not in users)
+        # app.logger.info("users[user_id] != user_key?",users[user_id] != user_key)
+        # app.logger.info("user key: %s", user_key)
         username = 'Unknown'
 
         # Check if both or none of the user_id and user_key are provided
