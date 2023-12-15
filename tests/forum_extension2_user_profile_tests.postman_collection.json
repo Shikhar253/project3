@@ -1,0 +1,373 @@
+{
+  "info": {
+    "_postman_id": "1549fdea-691f-4b23-a029-d5b782b11260",
+    "name": "forum_extension2_user_profile_tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "26564101"
+  },
+  "item": [
+    {
+      "name": "create new user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Create user returns user id and key\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData).to.have.property('user_id');\r",
+              "    pm.expect(jsonData).to.have.property('user_key');\r",
+              "\r",
+              "    pm.environment.set(\"user_id\", jsonData.user_id);\r",
+              "    pm.environment.set(\"user_key\", jsonData.user_key);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response has user_id and user_key\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData).to.have.property('user_id');\r",
+              "    pm.expect(jsonData).to.have.property('user_key');\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "content-type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\": \"TestUser2\",\r\n    \"real_name\": \"Test User\",\r\n    \"avatar_icon\": \"http://example.com/avatar.jpg\"\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/user",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["user"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "create a new post with user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Create user returns 200 status code\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Create user returns user id and key\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData).to.have.property('user_id');\r",
+              "    pm.expect(jsonData).to.have.property('user_key');\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Create post returns 200 status code\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Create post returns post id and key\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData).to.have.property('id');\r",
+              "    pm.expect(jsonData).to.have.property('key');\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Create post returns associated user id\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData).to.have.property('user_id');\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Read post returns 200 status code\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Read post returns associated user id\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData).to.have.property('user_id');\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response has expected structure\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData).to.have.property('id');\r",
+              "    pm.environment.set(\"post_id\",jsonData.id)\r",
+              "    pm.expect(jsonData).to.have.property('key');\r",
+              "    pm.expect(jsonData).to.have.property('timestamp');\r",
+              "    pm.expect(jsonData).to.have.property('user_id');\r",
+              "    pm.expect(jsonData).to.have.property('user_key');\r",
+              "    pm.expect(jsonData).to.have.property('username');\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"msg\": \"hello\",\r\n    \"user_id\":\"{{user_id}}\",\r\n    \"user_key\":\"{{user_key}}\"\r\n\r\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/post",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["post"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "create new user without metadata",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"User creation without unique metadata fails\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(pm.response.code).to.eql(400); \r",
+              "    pm.expect(jsonData.error).to.eql(\"Username is required\");\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"real_name\": \"Test User\",\r\n    \"avatar_icon\": \"http://example.com/avatar.jpg\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/user",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["user"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "create new user with duplicate metadata",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"User creation with existing username fails\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(pm.response.code).to.eql(400);\r",
+              "    pm.expect(jsonData).to.have.property('error');\r",
+              "    pm.expect(jsonData.error).to.eql('Username already exists');\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\": \"TestUser\",\r\n    \"real_name\": \"Test User\",\r\n    \"avatar_icon\": \"http://example.com/avatar.jpg\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/user",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["user"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "retrieve user's metadata",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.eql(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"User metadata retrieval is successful\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(pm.response.code).to.eql(200);\r",
+              "    pm.expect(jsonData).to.have.property('username'); \r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response should be okay to process\", function () {\r",
+              "    pm.response.to.be.ok;\r",
+              "    pm.response.to.be.withBody;\r",
+              "    pm.response.to.be.json;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response has user data\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData).to.have.property('username');\r",
+              "});\r"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:5000/user/{{user_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["user", "{{user_id}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "edit user's metadata",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response should be okay to process\", function () {\r",
+              "    pm.response.to.be.ok;\r",
+              "    pm.response.to.be.withBody;\r",
+              "    pm.response.to.be.json;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response has success message\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData).to.have.property('message');\r",
+              "    pm.expect(jsonData.message).to.eql('User metadata updated');\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\": \"edittedUserName\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/user/{{user_key}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["user", "{{user_key}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "edit user's metadata with invalid user key",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"User metadata edit with invalid key fails\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(pm.response.code).to.eql(403);\r",
+              "    pm.expect(jsonData.error).to.eql(\"Invalid key\");\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/user/test",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["user", "test"]
+        }
+      },
+      "response": []
+    }
+  ]
+}

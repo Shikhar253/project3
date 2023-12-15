@@ -230,6 +230,9 @@ def search_posts_by_user(user_id):
         with state_lock:
             user_posts = [post for post in posts if post.get('user_id') == user_id]
 
+        if not user_posts:
+            return jsonify({"error": "Invalid user ID"}), 400
+
         return jsonify(user_posts)
 
     except Exception as e:

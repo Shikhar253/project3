@@ -13,6 +13,9 @@ PID=$!
 # Run Newman with the specified Postman collections and environment
 echo "running tests..."
 newman run ../tests/forum_multiple_posts.postman_collection.json -e ../tests/env.json # Use the environment file
-newman run ../tests/forum_extension1_users_and_user_keys_tests.postman_collection.json
 newman run ../tests/forum_post_read_delete.postman_collection.json -n 50 # 50 iterations
+newman run ../tests/forum_extension1_users_and_user_keys_tests.postman_collection.json
+newman run ../tests/forum_extension2_user_profile_tests.postman_collection.json
+newman run ../tests/forum_extension3_4_5_tests.postman_collection.json
+
 echo "tests completed"
