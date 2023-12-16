@@ -2,13 +2,13 @@
 
 ## Team Members:
 
-- Daixuan Chen - CWID
+- Daixuan Chen - 20015422
 
   - Email: dchen30@stevens.edu
 
-- Fan Zhang - CWID
+- Fan Zhang - 20016134
 
-  - Email: [email]
+  - Email: fzhang32@stevens.edu
 
 - Shikhar Saxena - 20021187
   - Email: ssaxena10@stevens.edu
@@ -19,7 +19,7 @@
 
 ## Project Details:
 
-- Hours Spent: 20 hours
+- Hours Spent: 30 hours
 - Description of Testing:
   - Tested using Postman and a test script
 - Unresolved Bugs/Issues:
@@ -48,7 +48,8 @@
 
    - Added an endpoint to search posts by a specific user.
 
-5. **Extension 5:** [Describe the 5th extension]
+5) **Fulltext search:**
+   - Added an endpoint to search the contents of the post’s msg.
 
 ## Testing Summaries:
 
