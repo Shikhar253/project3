@@ -1,11 +1,11 @@
 # Project 3: Web Forum
 
 ## Team Members:
-- Daixuan Chen - CWID
-  - Email: [email]
+- Daixuan Chen - 20015422
+  - Email: dchen30@stevens.edu
 
-- Fan Zhang - CWID
-  - Email: [email]
+- Fan Zhang - 20016134
+  - Email: fzhang32@stevens.edu
 
 - Shikhar Saxena - 20021187
   - Email: ssaxena10@stevens.edu
@@ -14,7 +14,7 @@
 - URL: [GitHub Repo](https://github.com/Shikhar253/project3)
 
 ## Project Details:
-- Hours Spent: 20 hours
+- Hours Spent: 30 hours
 - Description of Testing:
   - Tested using Postman and a test script
 - Unresolved Bugs/Issues:
@@ -37,7 +37,8 @@
 4) **User-based Range Queries:**
    - Added an endpoint to search posts by a specific user.
 
-5) **Extension 5:** [Describe the 5th extension]
+5) **Fulltext search:** 
+   - Added an endpoint to search the contents of the post’s msg.
 
 ## Testing Summaries:
 [Insert detailed summaries of tests for each extension, including how to interpret the testing framework and the tests written.]
