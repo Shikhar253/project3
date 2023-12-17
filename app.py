@@ -171,6 +171,7 @@ def read_post(post_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 # Delete a Post
 @app.route('/post/<int:post_id>/delete/<string:key>', methods=['DELETE'])
 def delete_post(post_id, key):
@@ -181,19 +182,39 @@ def delete_post(post_id, key):
             if not post:
                 return jsonify({"error": f"Post with id {post_id} not found"}), 404
 
-            if key != post["key"] and (not post.get("user_id") or key != users.get(post["user_id"])):
-                return jsonify({"error": "Forbidden. Incorrect key"}), 403
+            user_id = post.get("user_id")
+            username = user_metadata.get(user_id, {}).get('username', 'Unknown')
 
-            posts.remove(post)
+            # Check if the key matches the post's key
+            if key == post["key"]:
+                posts.remove(post)
+                return jsonify({"message": "Post deleted using the post's key", "id": post["id"], "key": post["key"], "timestamp": post["timestamp"], "user_id": user_id, "user_key": post.get("user_key"),
+                     "username": username}), 200
 
-        user_id = post.get("user_id")
-        username = user_metadata.get(user_id, {}).get('username', 'Unknown')
+            # If the post's key does not match, check if it's the user's key
+            if user_id and key == users.get(user_id):
+                posts.remove(post)
+                return jsonify({"message": "Post deleted using the user's key", "id": post["id"], "key": post["key"], "timestamp": post["timestamp"], "user_id": user_id, "user_key": post.get("user_key"),
+                     "username": username}), 200
 
-        return jsonify({"id": post["id"], "key": post["key"], "timestamp": post["timestamp"], "user_id": user_id, "user_key": post.get("user_key"),
-                        "username": username}),200
+            # If neither condition is met, the key is incorrect
+            return jsonify({"error": "Forbidden. Incorrect key"}), 403
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    #         if key != post["key"] and (not post.get("user_id") or key != users.get(post["user_id"])):
+    #             return jsonify({"error": "Forbidden. Incorrect key"}), 403
+    #
+    #         posts.remove(post)
+    #
+    #     user_id = post.get("user_id")
+    #     username = user_metadata.get(user_id, {}).get('username', 'Unknown')
+    #
+    #     return jsonify({"id": post["id"], "key": post["key"], "timestamp": post["timestamp"], "user_id": user_id, "user_key": post.get("user_key"),
+    #                     "username": username}),200
+    #
+    # except Exception as e:
+    #     return jsonify({"error": str(e)}), 500
 
 # Search for posts within a date/time range
 @app.route('/posts', methods=['GET'])
