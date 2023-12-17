@@ -41,14 +41,13 @@
    - Created endpoints to retrieve, edit user metadata, and display it with associated posts.
 
 3. **Date- and Time-based Range Queries:**
-
    - Added an endpoint for searching posts based on date and time ranges.
 
-4. **User-based Range Queries:**
+4) **User-based Range Queries:**
 
    - Added an endpoint to search posts by a specific user.
 
-5. **Fulltext search:**
+5) **Fulltext search:**
    - Added an endpoint to search the contents of the post’s msg.
 
 ## Testing Summaries:
