@@ -1,413 +1,517 @@
 {
-  "info": {
-    "_postman_id": "b7b76209-0526-45d6-b847-bc05371861c0",
-    "name": "forum_extension3_4_5_tests",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "26564101"
-  },
-  "item": [
-    {
-      "name": "create new user",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Create user returns user id and key\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData).to.have.property('user_id');\r",
-              "    pm.expect(jsonData).to.have.property('user_key');\r",
-              "\r",
-              "    pm.environment.set(\"user_id\", jsonData.user_id);\r",
-              "    pm.environment.set(\"user_key\", jsonData.user_key);\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Response has user_id and user_key\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData).to.have.property('user_id');\r",
-              "    pm.expect(jsonData).to.have.property('user_key');\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "content-type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"username\": \"TestUser3\",\r\n    \"real_name\": \"Test User\",\r\n    \"avatar_icon\": \"http://example.com/avatar.jpg\"\r\n}"
-        },
-        "url": {
-          "raw": "http://localhost:5000/user",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["user"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "create a new post with user",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Create user returns 200 status code\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Create user returns user id and key\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData).to.have.property('user_id');\r",
-              "    pm.expect(jsonData).to.have.property('user_key');\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Create post returns 200 status code\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Create post returns post id and key\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData).to.have.property('id');\r",
-              "    pm.expect(jsonData).to.have.property('key');\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Create post returns associated user id\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData).to.have.property('user_id');\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Read post returns 200 status code\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Read post returns associated user id\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData).to.have.property('user_id');\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Status code is 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Response has expected structure\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData).to.have.property('id');\r",
-              "    pm.environment.set(\"post_id\",jsonData.id)\r",
-              "    pm.expect(jsonData).to.have.property('key');\r",
-              "    pm.expect(jsonData).to.have.property('timestamp');\r",
-              "    pm.expect(jsonData).to.have.property('user_id');\r",
-              "    pm.expect(jsonData).to.have.property('user_key');\r",
-              "    pm.expect(jsonData).to.have.property('username');\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"msg\": \"hello\",\r\n    \"user_id\":\"{{user_id}}\",\r\n    \"user_key\":\"{{user_key}}\"\r\n\r\n}"
-        },
-        "url": {
-          "raw": "http://127.0.0.1:5000/post",
-          "protocol": "http",
-          "host": ["127", "0", "0", "1"],
-          "port": "5000",
-          "path": ["post"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Date-and-time-based range queries",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Date/time range query is successful\", function () {\r",
-              "    pm.expect(pm.response.code).to.eql(200);\r",
-              "    var jsonData = pm.response.json();\r",
-              "    jsonData.forEach(function(post) {\r",
-              "        pm.expect(post).to.have.property('id');\r",
-              "        pm.expect(post).to.have.property('message');\r",
-              "        pm.expect(post).to.have.property('timestamp');\r",
-              "    });\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "http://127.0.0.1:5000/posts?start=2022-01-01T00:00:00&end=2023-12-01T23:59:59",
-          "protocol": "http",
-          "host": ["127", "0", "0", "1"],
-          "port": "5000",
-          "path": ["posts"],
-          "query": [
-            {
-              "key": "start",
-              "value": "2022-01-01T00:00:00"
-            },
-            {
-              "key": "end",
-              "value": "2023-12-01T23:59:59"
-            }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Date-and-time based range queries with invalid format",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Invalid date/time format returns error\", function () {\r",
-              "    var start = pm.request.url.query.get('start');\r",
-              "    var end = pm.request.url.query.get('end');\r",
-              "    var invalidParam = start || end;\r",
-              "    var expectedErrorMessage = \"Invalid isoformat string: '\" + invalidParam + \"'\";\r",
-              "\r",
-              "    pm.expect(pm.response.code).to.eql(400);\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData.error).to.eql(expectedErrorMessage);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://127.0.0.1:5000/posts?start=1",
-          "protocol": "http",
-          "host": ["127", "0", "0", "1"],
-          "port": "5000",
-          "path": ["posts"],
-          "query": [
-            {
-              "key": "start",
-              "value": "1"
-            }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "User-based range queries",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"User posts query is successful\", function () {\r",
-              "    pm.expect(pm.response.code).to.eql(200);\r",
-              "    var jsonData = pm.response.json();\r",
-              "    jsonData.forEach(function(post) {\r",
-              "        pm.expect(post).to.have.property('user_id');\r",
-              "        pm.expect(post.user_id).to.eql(pm.variables.get('user_id'));\r",
-              "    });\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "http://localhost:5000/posts/user/{{user_id}}",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["posts", "user", "{{user_id}}"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "User-based range queries with invalid user id",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Invalid user ID returns error\", function () {\r",
-              "    pm.expect(pm.response.code).to.eql(400);\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData.error).to.eql(\"Invalid user ID\");\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "protocolProfileBehavior": {
-        "disableBodyPruning": true
-      },
-      "request": {
-        "method": "GET",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://localhost:5000/posts/user/10000",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["posts", "user", "10000"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Fulltext search",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Full-text search query is successful\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    if (jsonData) {\r",
-              "        pm.expect(pm.response.code).to.eql(200);\r",
-              "        jsonData.forEach(function(post) {\r",
-              "            pm.expect(post).to.have.property('msg');\r",
-              "            if (post.msg && pm.variables.get('query')) {\r",
-              "                pm.expect(post.msg.toLowerCase()).to.include(pm.variables.get('query').toLowerCase());\r",
-              "            }\r",
-              "        });\r",
-              "    }\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Invalid query string returns empty array\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData).to.be.an('array');\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://127.0.0.1:5000/posts/search?query=hello",
-          "protocol": "http",
-          "host": ["127", "0", "0", "1"],
-          "port": "5000",
-          "path": ["posts", "search"],
-          "query": [
-            {
-              "key": "query",
-              "value": "hello"
-            }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Fulltext search with invalid query",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Invalid query string returns empty array\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData).to.be.an('array');\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "http://127.0.0.1:5000/posts/search?query=",
-          "protocol": "http",
-          "host": ["127", "0", "0", "1"],
-          "port": "5000",
-          "path": ["posts", "search"],
-          "query": [
-            {
-              "key": "query",
-              "value": ""
-            }
-          ]
-        }
-      },
-      "response": []
-    }
-  ]
+	"info": {
+		"_postman_id": "b7b76209-0526-45d6-b847-bc05371861c0",
+		"name": "forum_extension3_4_5_tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26564101"
+	},
+	"item": [
+		{
+			"name": "create new user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Create user returns user id and key\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('user_id');\r",
+							"    pm.expect(jsonData).to.have.property('user_key');\r",
+							"\r",
+							"    pm.environment.set(\"user_id\", jsonData.user_id);\r",
+							"    pm.environment.set(\"user_key\", jsonData.user_key);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has user_id and user_key\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('user_id');\r",
+							"    pm.expect(jsonData).to.have.property('user_key');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "content-type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"TestUser3\",\r\n    \"real_name\": \"Test User\",\r\n    \"avatar_icon\": \"http://example.com/avatar.jpg\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create a new post with user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Create user returns 200 status code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Create user returns user id and key\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('user_id');\r",
+							"    pm.expect(jsonData).to.have.property('user_key');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Create post returns 200 status code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Create post returns post id and key\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('id');\r",
+							"    pm.expect(jsonData).to.have.property('key');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Create post returns associated user id\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('user_id');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Read post returns 200 status code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Read post returns associated user id\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('user_id');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has expected structure\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('id');\r",
+							"    pm.environment.set(\"post_id\",jsonData.id)\r",
+							"    pm.expect(jsonData).to.have.property('key');\r",
+							"    pm.expect(jsonData).to.have.property('timestamp');\r",
+							"    pm.expect(jsonData).to.have.property('user_id');\r",
+							"    pm.expect(jsonData).to.have.property('user_key');\r",
+							"    pm.expect(jsonData).to.have.property('username');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"msg\": \"hello\",\r\n    \"user_id\":\"{{user_id}}\",\r\n    \"user_key\":\"{{user_key}}\"\r\n\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/post",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Date-and-time-based range queries",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Date/time range query is successful\", function () {\r",
+							"    pm.expect(pm.response.status).to.eql(200);\r",
+							"    var jsonData = pm.response.json();\r",
+							"    jsonData.forEach(function(post) {\r",
+							"        pm.expect(post).to.have.property('id');\r",
+							"        pm.expect(post).to.have.property('message');\r",
+							"        pm.expect(post).to.have.property('timestamp');\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:5000/posts?start=2022-01-01T00:00:00&end=2023-12-01T23:59:59",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"posts"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "2022-01-01T00:00:00"
+						},
+						{
+							"key": "end",
+							"value": "2023-12-01T23:59:59"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Date-and-time-based range queries 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Date/time range query is successful\", function () {\r",
+							"    pm.expect(pm.response.status).to.eql(200);\r",
+							"    var jsonData = pm.response.json();\r",
+							"    jsonData.forEach(function(post) {\r",
+							"        pm.expect(post).to.have.property('id');\r",
+							"        pm.expect(post).to.have.property('message');\r",
+							"        pm.expect(post).to.have.property('timestamp');\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:5000/posts?start=2022-01-01T00:00:00",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"posts"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "2022-01-01T00:00:00"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Date-and-time based range queries with invalid format",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Invalid date/time format returns error\", function () {\r",
+							"    var start = pm.request.url.query.get('start');\r",
+							"    var end = pm.request.url.query.get('end');\r",
+							"    var invalidParam = start || end;\r",
+							"    var expectedErrorMessage = \"Invalid isoformat string: '\" + invalidParam + \"'\";\r",
+							"\r",
+							"    pm.expect(pm.response.status).to.eql(400);\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.error).to.eql(expectedErrorMessage);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/posts?start=1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"posts"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User-based range queries",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User posts query is successful\", function () {\r",
+							"    pm.expect(pm.response.status).to.eql(200);\r",
+							"    var jsonData = pm.response.json();\r",
+							"    jsonData.forEach(function(post) {\r",
+							"        pm.expect(post).to.have.property('user_id');\r",
+							"        pm.expect(post.user_id).to.eql(pm.variables.get('user_id'));\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/posts/user/{{user_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"posts",
+						"user",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User-based range queries with invalid user id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Invalid user ID returns error\", function () {\r",
+							"    pm.expect(pm.response.status).to.eql(500);\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.error).to.eql(\"Invalid user ID\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/posts/user/10000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"posts",
+						"user",
+						"10000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fulltext search",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Full-text search query is successful\", function () {\r",
+							"    pm.expect(pm.response.status).to.eql(200);\r",
+							"    var jsonData = pm.response.json();\r",
+							"    jsonData.forEach(function(post) {\r",
+							"        pm.expect(post).to.have.property('msg');\r",
+							"        pm.expect(post.msg.toLowerCase()).to.include(pm.variables.get('query').toLowerCase());\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Invalid query string returns empty array\", function () {\r",
+							"    pm.expect(pm.response.status).to.eql(200);\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.an('array').that.is.empty;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/posts/search?query=hello",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"posts",
+						"search"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "hello"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fulltext search with invalid query",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Invalid query string returns empty array\", function () {\r",
+							"    pm.expect(pm.response.status).to.eql(200);\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.an('array').that.is.empty;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:5000/posts/search?query=",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"posts",
+						"search"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
 }
