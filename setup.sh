@@ -2,4 +2,4 @@
 
 pip3 install Flask
 
-npm i newman
+sudo npm install -g newman
