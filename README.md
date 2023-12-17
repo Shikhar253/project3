@@ -54,7 +54,7 @@
 
 [Insert detailed summaries of tests for each extension, including how to interpret the testing framework and the tests written.]
 
-1. ** Users and User Keys: **
+1. **Users and User Keys:**
 
    - This test mainly test user creation, post creation, post reading, and post deletion. Each test contains a series of assertions to verify whether the API response meets expectations.
 
@@ -66,7 +66,7 @@
 
    - Deleting a post: This test sends a DELETE request to the /post/{{post_id}}/delete/{{user_key}} endpoint. The test asserts that the response status code is 200 and that the response body contains the id, key, timestamp, user_id, user_key, and username attributes.
 
-2. ** User Profile **
+2. **User Profile**
 
    - Create User: This test sends a POST request to the /user endpoint to create a new user profile. It checks if the response status code is 200 and if the response body contains the user_id and user_key properties. Also, it contains two tests to check if the response contains the according status code and error message when send invalid request.
 
