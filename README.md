@@ -11,6 +11,7 @@
   - Email: fzhang32@stevens.edu
 
 - Shikhar Saxena - 20021187
+  
   - Email: ssaxena10@stevens.edu
 
 ## GitHub Repository:
@@ -21,7 +22,7 @@
 
 - Hours Spent: 30 hours
 - Description of Testing:
-  - Tested using Postman and a test script
+  - Tested using Postman and ran testing script
 - Unresolved Bugs/Issues:
   - None that we are aware of
 
@@ -51,8 +52,6 @@
    - Added an endpoint to search the contents of the post’s msg.
 
 ## Testing Summaries:
-
-[Insert detailed summaries of tests for each extension, including how to interpret the testing framework and the tests written.]
 
 1. **Users and User Keys:**
 
